@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
 
     @GetMapping
-    public String getUser(Model model){
+    public String getUser(Model model) {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(10);
         userInfo.setFirstName("Dima");
         userInfo.setLastName("Bilan");
         userInfo.setRole(Role.ADMIN);
-        model.addAttribute("name",userInfo.getFirstName());
+        model.addAttribute("user", userInfo);
         return "user-page";
     }
 }
