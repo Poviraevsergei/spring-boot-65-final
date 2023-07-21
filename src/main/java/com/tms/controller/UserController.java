@@ -7,6 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -18,7 +21,18 @@ public class UserController {
         userInfo.setFirstName("Dima");
         userInfo.setLastName("Bilan");
         userInfo.setRole(Role.ADMIN);
-        model.addAttribute("user", userInfo);
+
+        UserInfo secondUserInfo = new UserInfo();
+        secondUserInfo.setId(11);
+        secondUserInfo.setFirstName("Anatolii");
+        secondUserInfo.setLastName("Vaserman");
+        secondUserInfo.setRole(Role.MODERATOR);
+
+        List<UserInfo> users = new ArrayList<>();
+        users.add(userInfo);
+        users.add(secondUserInfo);
+
+        model.addAttribute("users", users);
         return "user-page";
     }
 }
