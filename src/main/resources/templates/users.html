@@ -48,6 +48,7 @@
         <td class="align-middle" th:text="${user.role}"></td>
         <td class="align-middle" th:text="${user.createdAt}"></td>
         <td class="align-middle" th:text="${user.updatedAt}"></td>
+        <td class="align-middle text-center"><a class="btn btn-secondary" th:href="'/'+${user.id}">Change</a></td>
     </tr>
 </table>
 </body>
