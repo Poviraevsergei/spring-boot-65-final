@@ -12,4 +12,5 @@ public class UserInfo {
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
     private Role role;
+    private Boolean willDelete;
 }

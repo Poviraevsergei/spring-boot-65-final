@@ -1,38 +1,62 @@
 package com.tms.controller;
 
-import com.tms.domain.Role;
 import com.tms.domain.UserInfo;
+import com.tms.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/user")
 public class UserController {
 
-    @GetMapping
-    public String getUser(Model model) {
-        UserInfo userInfo = new UserInfo();
-        userInfo.setId(10);
-        userInfo.setFirstName("Dima");
-        userInfo.setLastName("Bilan");
-        userInfo.setRole(Role.ADMIN);
+    private final UserService userService;
 
-        UserInfo secondUserInfo = new UserInfo();
-        secondUserInfo.setId(11);
-        secondUserInfo.setFirstName("Anatolii");
-        secondUserInfo.setLastName("Vaserman");
-        secondUserInfo.setRole(Role.MODERATOR);
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-        List<UserInfo> users = new ArrayList<>();
-        users.add(userInfo);
-        users.add(secondUserInfo);
-
+    @GetMapping("/")
+    public String getUsers(Model model) {
+        List<UserInfo> users = userService.getUsers();
         model.addAttribute("users", users);
-        return "user-page";
+        model.addAttribute("userInfo", new UserInfo());
+        return "users";
+    }
+
+    @GetMapping("/{id}")
+    public String getUser(Model model, @PathVariable Integer id) {
+        UserInfo userInfo = userService.getUser(id);
+        model.addAttribute("userInfo", userInfo);
+        return "edit";
+    }
+
+    @PostMapping("/")
+    public RedirectView createUser(RedirectAttributes redirectAttributes,
+                                   @ModelAttribute UserInfo userInfo) {
+        userService.createUser(userInfo);
+        String message = "Created user " + userInfo.getFirstName() + " " + userInfo.getLastName();
+        redirectAttributes.addFlashAttribute("userMessage", message);
+        return new RedirectView("/");
+    }
+
+    @PostMapping("/{id}")
+    public RedirectView updateUser(RedirectAttributes redirectAttributes,
+                                   @PathVariable Integer id,
+                                   @ModelAttribute UserInfo userInfo) {
+        if (userInfo.getWillDelete()) {
+            userService.deleteUserById(id);
+        } else {
+            userService.updateUser(id, userInfo);
+        }
+        String message = (userInfo.getWillDelete() ? "Deleted" : "Updated") + " user " + userInfo.getFirstName();
+        redirectAttributes.addFlashAttribute("userMessage", message);
+        return new RedirectView("/");
     }
 }
