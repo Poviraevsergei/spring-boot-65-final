@@ -11,6 +11,19 @@ import java.util.Map;
 public class UserRepository {
     private final Map<Integer, UserInfo> users = new HashMap<>();
 
+    {
+        UserInfo userInfo1 = new UserInfo();
+        userInfo1.setId(1);
+        userInfo1.setFirstName("Anton");
+
+        UserInfo userInfo2 = new UserInfo();
+        userInfo2.setId(2);
+        userInfo2.setFirstName("Ibragim");
+
+        users.put(1,userInfo1);
+        users.put(2,userInfo2);
+    }
+
     public List<UserInfo> findAll(){
         return users.values().stream().toList();
     }
