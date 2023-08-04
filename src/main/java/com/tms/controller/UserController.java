@@ -2,6 +2,11 @@ package com.tms.controller;
 
 import com.tms.domain.UserInfo;
 import com.tms.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController //для REST архитектуры
@@ -35,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserInfo> getUser(@PathVariable Integer id) {
+    public ResponseEntity<UserInfo> getUser(@PathVariable @Parameter(description = "Это id пользователя") Integer id) {
         UserInfo userInfo = userService.getUser(id);
         if (userInfo != null) {
             return new ResponseEntity<>(userInfo, HttpStatus.OK);
@@ -44,8 +51,15 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Добавляем пользователя", description = "Мы добавляем пользователя, нужно на вход передать json UserInfo!")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Мы успешно создали пользователя"),
+            @ApiResponse(responseCode = "409", description = "Не получилось создать пользователя"),
+            @ApiResponse(responseCode = "400", description = "Ошибка со стороны клиента"),
+            @ApiResponse(responseCode = "500", description = "Ошибка на сервере")
+    })
     @PostMapping
-    public ResponseEntity<HttpStatus> createUser(@RequestBody UserInfo userInfo) {
+    public ResponseEntity<HttpStatus> createUser(@RequestBody @Parameter(description = "пользователь которого добавляем") UserInfo userInfo) {
         UserInfo userInfoSaved = userService.createUser(userInfo);
         UserInfo userInfoResult = userService.getUser(userInfoSaved.getId());
         if (userInfoResult != null) {
@@ -55,6 +69,7 @@ public class UserController {
         }
     }
 
+    @Tag(name = "Test tag", description = "This is our test tag description!")
     @PutMapping
     public ResponseEntity<HttpStatus> updateUser(@RequestBody UserInfo userInfo) {
         userService.updateUser(userInfo);
