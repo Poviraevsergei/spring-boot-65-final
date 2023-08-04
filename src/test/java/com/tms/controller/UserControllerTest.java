@@ -1,49 +1,52 @@
 package com.tms.controller;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+import com.tms.domain.Role;
+import com.tms.domain.UserInfo;
+import com.tms.service.UserService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("Наш класс")
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(UserController.class)
 public class UserControllerTest {
 
+    @MockBean
+    UserService userService;
+    static UserInfo userInfo;
+
+    @Autowired
+    MockMvc mockMvc;
 
     @BeforeAll
-    public static void beforeAll(){
-        System.out.println("Before all!");
-    }
-
-    @BeforeEach
-    public void beforeEach(){
-        System.out.println("Before each!");
-    }
-
-    @AfterAll
-    public static void afterAll(){
-        System.out.println("After all!");
-    }
-
-    @AfterEach
-    public void afterEach(){
-        System.out.println("After each!");
-    }
-    @Test
-    @DisplayName("Наш метод")
-    @RepeatedTest(5)
-    @Tag("user")
-    public void getUserTest(){
-
+    public static void beforeAll() {
+        userInfo = new UserInfo();
+        userInfo.setId(10);
+        userInfo.setFirstName("Dima");
+        userInfo.setLastName("Gorohov");
+        userInfo.setRole(Role.USER);
     }
 
     @Test
-    public void getUserSecondTest(){
+    public void getUserTest() throws Exception {
+        Mockito.when(userService.getUser(10)).thenReturn(userInfo);
 
+        mockMvc.perform(get("/").param("id","10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.hasSize(1)))
+                .andExpect(jsonPath("$[0].firstName", Matchers.is("Dima")));
     }
 }
