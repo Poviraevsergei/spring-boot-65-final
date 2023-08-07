@@ -24,13 +24,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SpringBoot65FinalApplication {
 
-    static final Logger log =
-            LoggerFactory.getLogger(SpringBoot65FinalApplication.class);
+    static final Logger log = LoggerFactory.getLogger(SpringBoot65FinalApplication.class);
 
     public static void main(String[] args) {
-        log.info("Before Starting application");
         SpringApplication.run(SpringBoot65FinalApplication.class, args);
+        log.debug("After Starting application DEBUG");
+        log.info("After Starting application");
     }
-
-    //TODO: настройка логов через application.properties
 }

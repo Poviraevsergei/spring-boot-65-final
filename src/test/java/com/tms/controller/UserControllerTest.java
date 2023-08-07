@@ -16,9 +16,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
@@ -27,6 +28,7 @@ public class UserControllerTest {
     @MockBean
     UserService userService;
     static UserInfo userInfo;
+    static List<UserInfo> users;
 
     @Autowired
     MockMvc mockMvc;
@@ -38,13 +40,26 @@ public class UserControllerTest {
         userInfo.setFirstName("Dima");
         userInfo.setLastName("Gorohov");
         userInfo.setRole(Role.USER);
+
+        users = new ArrayList<>();
+        users.add(userInfo);
     }
+
 
     @Test
     public void getUserTest() throws Exception {
         Mockito.when(userService.getUser(10)).thenReturn(userInfo);
 
-        mockMvc.perform(get("/").param("id","10"))
+        mockMvc.perform(get("/user/10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName").value("Dima"));
+    }
+
+    @Test
+    public void getUsersTest() throws Exception {
+        Mockito.when(userService.getUsers()).thenReturn(users);
+
+        mockMvc.perform(get("/user"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(jsonPath("$[0].firstName", Matchers.is("Dima")));
