@@ -62,6 +62,7 @@ public class UserControllerTest {
         mockMvc.perform(get("/user"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))
-                .andExpect(jsonPath("$[0].firstName", Matchers.is("Dima")));
+                .andExpect(jsonPath("$[0].firstName", Matchers.is("Dima")))
+                .andExpect(jsonPath("$[0].lastName", Matchers.is("Gorohov")));
     }
 }

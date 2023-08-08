@@ -1,42 +1,50 @@
 package com.tms.repository;
 
 import com.tms.domain.UserInfo;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
 
 @Repository
 public class UserRepository {
-    private final Map<Integer, UserInfo> users = new HashMap<>();
+    public final EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+    public final EntityManager entityManager = emf.createEntityManager();
 
-    {
-        UserInfo userInfo1 = new UserInfo();
-        userInfo1.setId(1);
-        userInfo1.setFirstName("Anton");
+    //CRUD
 
-        UserInfo userInfo2 = new UserInfo();
-        userInfo2.setId(2);
-        userInfo2.setFirstName("Ibragim");
-
-        users.put(1,userInfo1);
-        users.put(2,userInfo2);
+    //CREATE
+    public void save(UserInfo userInfo) {
+        entityManager.getTransaction().begin();
+        entityManager.persist(userInfo);
+        entityManager.getTransaction().commit();
     }
 
-    public List<UserInfo> findAll(){
-        return users.values().stream().toList();
+    //DELETE
+    public void delete(int id) {
+        entityManager.getTransaction().begin();
+        entityManager.remove(entityManager.find(UserInfo.class, id));
+        entityManager.getTransaction().commit();
     }
 
-    public UserInfo findById(Integer id){
-        return users.get(id);
+    //Read
+    public UserInfo findById(int id) {
+        return entityManager.find(UserInfo.class, id);
     }
 
-    public void save(UserInfo userInfo){
-        users.put(userInfo.getId(),userInfo);
+    //READ JPQL!
+    public List<UserInfo> findAll() {
+        return new ArrayList<>();
     }
 
-    public void delete(Integer id){
-        users.remove(id);
+    //UPDATE
+    public void updateUser(UserInfo userInfo) {
+        entityManager.getTransaction().begin();
+        entityManager.merge(userInfo);
+        entityManager.getTransaction().commit();
     }
 }
