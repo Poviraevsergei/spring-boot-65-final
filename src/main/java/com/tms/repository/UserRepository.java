@@ -2,18 +2,19 @@ package com.tms.repository;
 
 import com.tms.domain.UserInfo;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
-
 
 @Repository
 public class UserRepository {
-    public final EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
-    public final EntityManager entityManager = emf.createEntityManager();
+
+    public final EntityManager entityManager;
+
+    public UserRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     //CRUD
 
@@ -38,7 +39,8 @@ public class UserRepository {
 
     //READ JPQL!
     public List<UserInfo> findAll() {
-        return new ArrayList<>();
+        Query query = entityManager.createQuery("FROM user_info");
+        return query.getResultList();
     }
 
     //UPDATE
