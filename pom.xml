@@ -43,19 +43,11 @@
             <version>2.1.0</version>
         </dependency>
 
-
         <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>6.2.1.Final</version>
-        </dependency>
-
-        <!-- JPA -->
-        <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
-            <version>3.1.0</version>
         </dependency>
 
         <!-- DB Driver -->

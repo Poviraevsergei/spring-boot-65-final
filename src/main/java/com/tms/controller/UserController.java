@@ -82,7 +82,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable Integer id) {
         UserInfo userInfoUpdated = userService.getUser(id);
-        userService.deleteUserById(id);
+        userService.deleteUserById(userInfoUpdated);
         UserInfo userInfo = userService.getUser(id);
         if (userInfo == null && userInfoUpdated != null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

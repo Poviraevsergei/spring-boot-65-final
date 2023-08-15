@@ -1,8 +1,9 @@
 package com.tms.repository;
 
 import com.tms.domain.UserInfo;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,43 +11,53 @@ import java.util.List;
 @Repository
 public class UserRepository {
 
-    public final EntityManager entityManager;
+    public final SessionFactory sessionFactory;
 
-    public UserRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    //CRUD
-
-    //CREATE
-    public void save(UserInfo userInfo) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(userInfo);
-        entityManager.getTransaction().commit();
-    }
-
-    //DELETE
-    public void delete(int id) {
-        entityManager.getTransaction().begin();
-        entityManager.remove(entityManager.find(UserInfo.class, id));
-        entityManager.getTransaction().commit();
+    public UserRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     //Read
     public UserInfo findById(int id) {
-        return entityManager.find(UserInfo.class, id);
+        Session session = sessionFactory.openSession();
+        UserInfo userInfo = session.find(UserInfo.class, id);
+        session.close();
+        return userInfo;
     }
 
-    //READ JPQL!
+    //Read HQL
     public List<UserInfo> findAll() {
-        Query query = entityManager.createQuery("FROM user_info");
-        return query.getResultList();
+        Session session = sessionFactory.openSession();
+        Query<UserInfo> query = session.createQuery("FROM user_info", UserInfo.class);
+        List<UserInfo> resultList = query.getResultList();
+        session.close();
+        return resultList;
     }
 
-    //UPDATE
+    //Create
+    public void save(UserInfo userInfo) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.persist(userInfo);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    //Update
     public void updateUser(UserInfo userInfo) {
-        entityManager.getTransaction().begin();
-        entityManager.merge(userInfo);
-        entityManager.getTransaction().commit();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.merge(userInfo);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    //Delete
+    public void delete(UserInfo userInfo) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.remove(userInfo);
+        session.getTransaction().commit();
+        session.close();
     }
 }
