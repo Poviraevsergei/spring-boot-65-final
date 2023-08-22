@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @OpenAPIDefinition(
         info = @Info(
@@ -23,12 +24,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 )
 @SpringBootApplication
 public class SpringBoot65FinalApplication {
-
-    static final Logger log = LoggerFactory.getLogger(SpringBoot65FinalApplication.class);
-
     public static void main(String[] args) {
         SpringApplication.run(SpringBoot65FinalApplication.class, args);
-        log.debug("After Starting application DEBUG");
-        log.info("After Starting application");
     }
 }

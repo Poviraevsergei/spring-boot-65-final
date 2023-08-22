@@ -1,7 +1,6 @@
-package com.tms.repo;
+package com.tms.repository;
 
 import com.tms.domain.UserInfo;
-import com.tms.repository.UserRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ import java.util.Optional;
 public class UserRepositoryTest {
 
     @Autowired
-    private UserRepo userRepository;
+    private UserRepository userRepository;
     static UserInfo userInfo;
 
     @BeforeAll
