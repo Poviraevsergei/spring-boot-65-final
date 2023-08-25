@@ -37,10 +37,6 @@ public class UserService {
         userRepository.saveAndFlush(userInfo);
     }
 
-    public List<UserInfo> findAllByRole(Role role) {
-        return userRepository.findAllByRole(role);
-    }
-
     public Optional<UserInfo> findUserByLastName(String firstName) {
         return userRepository.findUsersByLastName(firstName);
     }

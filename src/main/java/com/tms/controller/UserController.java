@@ -7,6 +7,7 @@ import com.tms.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
     @GetMapping
     public ResponseEntity<List<UserInfo>> getUsers(Principal principal) {
 /*        //1. We can find user that now doing this method!
@@ -37,16 +37,6 @@ public class UserController {
 /*        //2. Or using Principal !
         System.out.println(principal.getName());*/
         List<UserInfo> users = userService.getUsers();
-        if (users.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(users, HttpStatus.OK);
-        }
-    }
-
-    @GetMapping("/all/{role}")
-    public ResponseEntity<List<UserInfo>> getUsersByRole(@PathVariable String role) {
-        List<UserInfo> users = userService.findAllByRole(Role.valueOf(role));
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {

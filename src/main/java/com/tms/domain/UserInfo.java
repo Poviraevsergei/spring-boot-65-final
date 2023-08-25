@@ -33,8 +33,4 @@ public class UserInfo {
 
     @Column(name = "updated")
     private LocalDateTime updatedAt;
-
-    @Column(name = "user_role")
-    @Enumerated(EnumType.STRING)
-    private Role role;
 }
