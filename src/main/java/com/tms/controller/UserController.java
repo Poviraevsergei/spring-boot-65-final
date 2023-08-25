@@ -7,6 +7,7 @@ import com.tms.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController //для REST архитектуры
@@ -28,7 +30,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserInfo>> getUsers() {
+    public ResponseEntity<List<UserInfo>> getUsers(Principal principal) {
+/*        //1. We can find user that now doing this method!
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();*/
+
+/*        //2. Or using Principal !
+        System.out.println(principal.getName());*/
         List<UserInfo> users = userService.getUsers();
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
