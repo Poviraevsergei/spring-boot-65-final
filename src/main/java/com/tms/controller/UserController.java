@@ -5,6 +5,7 @@ import com.tms.domain.UserInfo;
 import com.tms.exception.UserNotFoundException;
 import com.tms.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @RestController //для REST архитектуры
 @RequestMapping("/user")
+@SecurityRequirement(name = "Bearer Authentication")
 public class UserController {
     private final UserService userService;
 
@@ -30,12 +32,7 @@ public class UserController {
         this.userService = userService;
     }
     @GetMapping
-    public ResponseEntity<List<UserInfo>> getUsers(Principal principal) {
-/*        //1. We can find user that now doing this method!
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();*/
-
-/*        //2. Or using Principal !
-        System.out.println(principal.getName());*/
+    public ResponseEntity<List<UserInfo>> getUsers() {
         List<UserInfo> users = userService.getUsers();
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -43,6 +40,7 @@ public class UserController {
             return new ResponseEntity<>(users, HttpStatus.OK);
         }
     }
+
 
     @GetMapping("/last/{lastName}")
     public ResponseEntity<UserInfo> getUserByLastName(@PathVariable String lastName) {

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -26,13 +27,13 @@ public class JwtUtils {
     public String generateJwtToken(String login) {
         return Jwts.builder()
                 .setSubject(login)
-                .setExpiration(new Date(new Date().getTime() + expiration))
+                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(expiration)))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
     public Boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJwt(token);
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;
         } catch (SignatureException e) {
             log.info("Invalid JWT signature: " + e);
@@ -56,7 +57,7 @@ public class JwtUtils {
 
     public String getLoginFromJwt(String token) {
         try {
-            return Jwts.parser().setSigningKey(secret).parseClaimsJwt(token).getBody().getSubject();
+            return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
         } catch (Exception e) {
             log.info("Can't take login from jwt: " + e);
         }

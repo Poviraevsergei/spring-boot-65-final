@@ -3,7 +3,7 @@ package com.tms.service;
 import com.tms.domain.Role;
 import com.tms.domain.UserInfo;
 import com.tms.repository.UserRepository;
-import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,6 +23,16 @@ public class UserService {
     }
 
     public Optional<UserInfo> getUser(Integer id) {
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
+        //1. по логину достешь пользователя
+        //2. сравниваешь id
+        //3. если id совпали то все ОК! Если не совпали то кидаем ошибку.
+        return userRepository.findById(id);
+    }
+
+    public Optional<UserInfo> getUserInfo(Integer id) {
+        //1. SpringContext -> login;
+        //2. дай польщователя и возвращаете его.
         return userRepository.findById(id);
     }
 
