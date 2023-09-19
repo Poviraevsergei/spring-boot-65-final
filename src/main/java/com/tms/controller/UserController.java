@@ -71,4 +71,6 @@ public class UserController {
         userService.deleteUserById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    
 }
