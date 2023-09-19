@@ -33,14 +33,16 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(value = UserController.class)
-@ContextConfiguration
-@WithMockUser(username="user",roles={"USER","ADMIN"})
+@AutoConfigureMockMvc(addFilters = false)
 public class UserControllerTest {
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     static List<UserInfo> users = new ArrayList<>();
 
@@ -58,7 +60,7 @@ public class UserControllerTest {
         Mockito.when(userService.getUsers()).thenReturn(users);
 
         mockMvc.perform(get("/user"))
-                //     .andExpect(status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(jsonPath("$[0].id", Matchers.equalTo(5)));
     }

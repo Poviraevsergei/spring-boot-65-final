@@ -1,12 +1,7 @@
 package multithreding;
 
 public class Main {
-    public static void main(String[] args) {
-        Counter counter = new Counter();
+    public static void main(String[] args) throws InterruptedException {
 
-        for (int i = 0; i < 5; i++) {
-            Thread thread = new Thread(new SecondClassThread(counter));
-            thread.start();
-        }
     }
 }
