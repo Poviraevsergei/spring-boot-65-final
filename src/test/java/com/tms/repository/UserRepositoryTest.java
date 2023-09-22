@@ -53,7 +53,7 @@ public class UserRepositoryTest {
         UserInfo userSaved = userRepository.save(userInfo);
         userSaved.setFirstName("UPDATED_NAME");
         UserInfo userUpdated = userRepository.saveAndFlush(userSaved);
-        Assertions.assertEquals(userUpdated.getFirstName(),"UPDATED_NAME");
+        Assertions.assertEquals(userUpdated.getFirstName(), "UPDATED_NAME");
     }
 
     @Test
