@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Start test and build
-      - run: echo "Starting test/build job ..."
+        run: echo "Starting test/build job ..."
         
       - name: Download project inside runner
         uses: actions/checkout@v3
