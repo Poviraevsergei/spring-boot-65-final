@@ -6,7 +6,7 @@ public class Main {
 
         for (int i=0;i<5;i++){
             Thread thread = new Thread(new SecondClassThread(counter));
-            thread.start();
+            thread.strt();
         }
     }
     
